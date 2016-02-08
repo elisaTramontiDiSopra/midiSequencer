@@ -1,0 +1,215 @@
+/*
+MODERN STYLE
+Developed for the B2ITALY website
+Elisa Pessa
+*/
+
+/*GENERAL*/
+@sequencer-color: #30343d;
+@color1: #44083C; 
+@color2: #710162; 
+@color3: #a12a5e; 
+@color4: #ed0345;
+@color5: #d61111;
+@color6: #ef6a32;
+@color7: #fbbf45;
+@color8: #aad962;
+@color9: #03c383;
+@color10: #03c3b3;
+@color11: #046a8f;
+@color12: #112C7A;
+@color13: #111C3C;
+
+/*SEQUENZA ALTERNATIVA COLORI
+@color1: #800231; 
+@color2: #8e0152; 
+@color3: #c51b7d; 
+@color4: #de77ae;
+@color5: #f1b6da;
+@color6: #fde0ef;
+@color7: #fde0ef;
+@color8: #e6f5d0;
+@color9: #b8e186;
+@color10: #7fbc41;
+@color11: #4d9221;
+@color12: #276419;
+@color13: #196435;
+*/
+
+body {
+    background-color: @sequencer-color;
+    }
+
+
+
+/**************************************************** SEQUENCER */
+#sequencer {
+	background-color: @sequencer-color;
+	width: 100%;
+	margin:auto; 
+	padding: 10px;
+    height:auto;
+	overflow: hidden; 
+	}
+
+
+/************************************************** INPUT SONG */
+#controlliSalvataggio{
+    margin: 15px;
+    }
+
+.inputSong {
+    border: none;
+    border-bottom: solid 1px white !important;
+    background-color: @sequencer-color;
+    color: white;
+    width: 500px;
+}
+
+input[type=text] {
+      font-family: courier;
+      padding:     0px;
+      height: 20px; 
+      margin: 5px;
+      height: 22px;
+
+   } 
+    
+.pulsante {
+    background-color: #555;
+    color: white;
+    width: 50px;
+    padding: 5px 25px;
+    display: inline;
+    margin: 10px;
+    border: 1px solid #7a7a7a;
+    }    
+
+
+/**************************************************** COLONNE */
+.colonna {
+	float: left;
+	}
+
+#colonnaLabel {
+	float: left;
+	width: 100px;
+	color: white;
+	}
+	
+.colonnaLabel > div {
+    height: 32px;
+    margin: 5px;
+		
+    display: flex;
+	align-items: center;
+  	justify-content: center;
+	
+	}	
+/***************************************** I PULSANTI */
+.colonna > div {
+	display: block;
+    width: 32px;
+    height: 32px;
+    margin: 5px 2px;
+	border-radius: 5px;
+	}
+
+.unchecked {
+    background-color:@sequencer-color !important;
+    border: 1px solid;
+}
+
+.checked {
+	border: solid 1px @sequencer-color;
+}
+
+.nota1 {
+    border: solid 1px @color1;
+    background-color: @color1;
+}
+.nota2 {
+    border: solid 1px @color2;
+    background-color: @color2;
+}
+   
+.nota3 { 
+    border: solid 1px @color3;
+    background-color: @color3;
+}
+
+.nota4 {
+    border: solid 1px @color4;
+    background-color: @color4;
+}
+.nota5 {
+    border: solid 1px @color5;
+    background-color: @color5;
+}
+.nota6 {
+    border: solid 1px @color6;
+    background-color: @color6;
+}
+.nota7 {
+    border: solid 1px @color7;
+    background-color: @color7;
+}
+   
+.nota8 { 
+    border: solid 1px @color8;
+    background-color: @color8;
+}
+
+.nota9 {
+    border: solid 1px @color9;
+    background-color: @color9;
+}
+.nota10 {
+    border: solid 1px @color10;
+    background-color: @color10;
+}   
+.nota11 {
+    border: solid 1px @color11;
+    background-color: @color11;
+}
+.nota12 {
+    border: solid 1px @color12;
+    background-color: @color12;
+}
+   
+.nota13 { 
+    border: solid 1px @color13;
+    background-color: @color13;
+}
+
+
+
+
+
+
+
+
+/***************************************************** LISTA CANZONI **************/
+
+.divCanzone {
+    .pulsante;
+    background-color: #9AAA00 !important;
+    width: 60% !important;
+    height: 45px;
+    margin: 15px auto;
+    text-transform: uppercase;
+    display: flex;
+	align-items: center;
+  	justify-content: center;
+  	font-size: 18pt;
+    font-weight: bold;
+    }
+
+
+
+
+
+
+
+
+
