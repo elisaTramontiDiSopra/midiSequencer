@@ -114,22 +114,82 @@ function cercoVariabileGetInURL() {
     return window.location.search.substring(4);
 }			
 	
+//load 
+function pageLoad(){
+	//funzioneSpinner();
+	console.log('Inizio load degli oggetti');
+	recuperoValoriCanzoneSelezionata(function(snap){
+		//console.log(snap);
+		console.log('Fine load degli oggetti');
+		canzoneSelezionata = snap.val();
+		console.log(canzoneSelezionata);
+			
+		//funzioneSpinner();
+		});
+	console.log('Fine pageLoad');
+};
 	
+
+
 //recupero i valori della canzone selezionata ---> idURL, sequenza_note, nome_canzone;
-function recuperoValoriCanzoneSelezionata() {
+function recuperoValoriCanzoneSelezionata(recuperaValoreSnapDellaCanzoneSelezionata) {
     //per mantenere la variabile idURL locale la piazzo qui dentro la funzione
     idURL = cercoVariabileGetInURL();
 	urlPerFirebase = myFirebaseRef + "/" + idURL;			
 	var sequenza_note=[];
 	var myFirebaseReference = new Firebase(urlPerFirebase)		
-    myFirebaseReference.once("value", function (snap) {       
-		canzoneSelezionata = snap.val();
-		sequenza_note = canzoneSelezionata.sequenza_note;
-		var nome_canzone = canzoneSelezionata.nome_canzone;	
-    });	
-	return sequenza_note;
+    myFirebaseReference.once("value", recuperaValoreSnapDellaCanzoneSelezionata);	
 }
 
+
+function loadDueIlRitornoDiSatana(){
+	console.log("C'era una volta...");
+	risultatoDellaPromessa = promisesCheCiImpiegaTempoADareRisultati();
+	risultatoDellaPromessa.then("questo dovrebbe comparire dopo 3 secondi");
+	console.log("The end");
+}
+
+
+
+
+function promisesCheCiImpiegaTempoADareRisultati() {
+	idURL = cercoVariabileGetInURL();
+	urlPerFirebase = myFirebaseRef + "/" + idURL;	
+	//console.log(urlPerFirebase);
+	var datoCheRecuperoDaFirebase;
+	var promessaRisultato = new Promise (function(haiUnRisultato, nienteCiccia){
+		console.log(haiUnRisultato);
+		setTimeout(function(){ alert("Hello"); }, 3000);								   
+		});
+	console.log(promessaRisultato);
+	return promessaRisultato
+}
+	/*if (datoCheRecuperoDaFirebase != undefined) {
+				risultatoCheCerco = datoCheRecuperoDaFirebase;
+				haiUnRisultato(risultatoCheCerco);
+				console.log("che botta di culo, ti è riuscita sta cosa");
+				} else {
+				nienteCiccia("che botta di culo, ti è riuscita sta cosa 2 la vendetta");	
+				}		*/
+/*	
+	promessaRisultato.then(
+		function (){
+			thisIsTheResult = "questa è la seconda operazione";
+			console.log(thisIsTheResult);
+			}).catch(
+			// console.log(thisIsTheError);
+			);
+	
+}
+
+function delayedAlert() {
+  timeoutID = window.setTimeout(slowAlert, 2000);
+}
+
+function slowAlert() {
+  alert("That was really slow!");
+}
+*/
 
 
 /*illumino i tastini basandomi sul valore dell'array
@@ -247,3 +307,6 @@ function coloroLeNoteDiUnaCanzoneSalvata (){
 		colonnaCanzoneSalvata = getElementByID(idColonnaCanzoneSalvata);
 	}
 }
+
+
+loadDueIlRitornoDiSatana();
