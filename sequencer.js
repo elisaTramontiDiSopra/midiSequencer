@@ -115,7 +115,44 @@ function cercoVariabileGetInURL() {
 }			
 	
 	
-	
+//recupero i valori della canzone selezionata ---> idURL, sequenza_note, nome_canzone;
+function recuperoValoriCanzoneSelezionata() {
+    //per mantenere la variabile idURL locale la piazzo qui dentro la funzione
+    idURL = cercoVariabileGetInURL();
+	urlPerFirebase = myFirebaseRef + "/" + idURL;			
+	var sequenza_note=[];
+	var myFirebaseReference = new Firebase(urlPerFirebase)		
+    myFirebaseReference.once("value", function (snap) {       
+		canzoneSelezionata = snap.val();
+		sequenza_note = canzoneSelezionata.sequenza_note;
+		var nome_canzone = canzoneSelezionata.nome_canzone;	
+    });	
+	return sequenza_note;
+}
+
+
+
+/*illumino i tastini basandomi sul valore dell'array
+function checkoNoteDellaCanzoneCaricata () {
+	sequenza_note = recuperoValoriCanzoneSelezionata();
+	console.log("seq"+sequenza_note);
+	for (z = 0; z < numCol; z++) {
+        valoreNota = sequenza_note[z];	
+		console.log("valore nota "+valoreNota);
+		/*colonnaId = determinoIdColonna(z);
+        //TEST VALUE valoreNota = 4;
+        classeCSSNota = "nota" + valoreNota;
+        //TEST VALUE colonnaIdCanzoneCaricata = "col01";
+        //PERCHE' LO ZERO ALLA FINE ???????????????????????????????????????????????????????????????????????????????????????????
+        notaDaCheckare = document.getElementById(colonnaIdCanzoneCaricata).getElementsByClassName(classeCSSNota)[0];
+        notaDaCheckare.classList.remove("unchecked");
+        notaDaCheckare.classList.add("checked"); 
+    }
+		
+}*/
+
+
+
 //recupero i valori di sequenza_note
 function recuperoValoriSequenzaNote() {
     //per mantenere la variabile idURL locale la piazzo qui dentro la funzione
@@ -191,7 +228,6 @@ function reverseToogle() {
         console.log(arrayCanzone);
     }
 }
-
 
 */
 
