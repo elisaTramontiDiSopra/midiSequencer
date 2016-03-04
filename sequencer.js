@@ -57,19 +57,6 @@ function controlloSeLaClasseEUnchecked (targetElement) {
     }
 }
 	
-/*salva	
-function salva() {
-    nomeCanzone = document.getElementById("nomeCanzone").value;		//prendo il nome della canzone 
-    var canzoneRef = myFirebaseRef.child(nomeCanzone);				//creo un elemento child nel db per la mia canzone
-    var canzoneRefPush = canzoneRef.push();							//creo questa variabile per poter usare push che così mi creerà nomi dinamici numerici e automatici - index
-    var idCanzone = prelevailTempoComeIndice();				    	//creo questa variabile da usare per contenere il timestamp che sarà un id unico tipo indice
-    canzoneRef.set({
-        "nome_canzone": nomeCanzone,
-        "sequenza_note": arrayCanzone,
-        "id": idCanzone,
-    });
-}*/
-
 
 function salva() {
     nomeCanzone = document.getElementById("nomeCanzone").value;		//prendo il nome della canzone 
@@ -84,21 +71,6 @@ function salva() {
 }
 
 
-
-
-
-
-/************************** RECUPERA ARRAY NOTE *********
-function recuperaNomeCanzone(targetElement) {
-    //recupero il valore 
-    nomeCanzone = targetElement.getAttribute("data-name");	
-    myFirebaseRef.on("value", function(snapshot) {
-        var nuoveCanzoni = snapshot.val();
-        console.log(nuoveCanzoni);			
-        console.log(nuoveCanzoni.nomecansone.nome_canzone)	
-    });
-}*/
-
 //preleva timecode	
 function prelevailTempoComeIndice() {
     var d = new Date();
@@ -110,46 +82,82 @@ function prelevailTempoComeIndice() {
 /*************************** FUNZIONI DEL SEQUENCER DI UNA CANZONE GIA' CREATA */	
 //cerco le variabili che ho passato nell'URL		
 function cercoVariabileGetInURL() {
-    //cerco la query e tolgo i primi 4 caratteri che sono ?id=
-    return window.location.search.substring(4);
+    return window.location.search.substring(4); //tolgo i primi 4 caratteri che sono ?id=
 }			
 	
+//load 
+function pageLoad(){
+	//funzioneSpinner();
+	var canzoneSelezionata;
+	console.log('Inizio load degli oggetti');
+	recuperoValoriCanzoneSelezionata(function(snap){
+		//console.log(snap);
+		console.log('Fine load degli oggetti');
+		//canzoneSelezionata = snap.val();			
+		//funzioneSpinner();
+		coloroTastiniCanzoneSelezionata(snap.val());
+		
+		});
+
+};
 	
+function coloroTastiniCanzoneSelezionata(canzoneSelezionata) {
+	var nomeCanzoneSelezionata = canzoneSelezionata.nome_canzone;
+	var sequenzaCanzoneSelezionata = canzoneSelezionata.sequenza_note;
+	for (z = 0; z < 50; z++) {
+        valoreNota = sequenzaCanzoneSelezionata[z];	
+		if (valoreNota !== 0) {
+			colonnaId = determinoIdColonna(z);
+			classeCSSNota = "nota" + valoreNota;
+			console.log(classeCSSNota);
+			notaDaCheckare = document.getElementById(colonnaId).getElementsByClassName(classeCSSNota)[0];
+			console.log(notaDaCheckare);
+			notaDaCheckare.classList.remove("unchecked");
+			notaDaCheckare.classList.add("checked");	
+		}
+	}
+}
+//2.3.4.0.0.0.0...
+
+function determinoIdColonna(numeroColonna) {
+	if (numeroColonna < 10) {
+		colonnaId = "col0" + numeroColonna;
+	} else {
+		colonnaId = "col"+numeroColonna;
+	}
+	return colonnaId;
+}
+
+
 //recupero i valori della canzone selezionata ---> idURL, sequenza_note, nome_canzone;
-function recuperoValoriCanzoneSelezionata() {
-    //per mantenere la variabile idURL locale la piazzo qui dentro la funzione
+function recuperoValoriCanzoneSelezionata(recuperaValoreSnapDellaCanzoneSelezionata) {
     idURL = cercoVariabileGetInURL();
 	urlPerFirebase = myFirebaseRef + "/" + idURL;			
 	var sequenza_note=[];
 	var myFirebaseReference = new Firebase(urlPerFirebase)		
-    myFirebaseReference.once("value", function (snap) {       
-		canzoneSelezionata = snap.val();
-		sequenza_note = canzoneSelezionata.sequenza_note;
-		var nome_canzone = canzoneSelezionata.nome_canzone;	
-    });	
-	return sequenza_note;
+    myFirebaseReference.once("value", recuperaValoreSnapDellaCanzoneSelezionata);	
+}
+
+
+//recupero i valori di sequenza_note
+function recuperoValoriSequenzaNote() {
+    //per mantenere la variabile idURL locale la piazzo qui dentro la funzione
+    idURL = cercoVariabileGetInURL();
+	console.log("idurl "+idURL);
+    myFirebaseRef.once('value', function (dataSnapshot) {
+        //con .val prendo tutti i dati del mio database che si trovano dentro a datasnapshot e le ottengo come oggetto JS
+        var tutteLeCanzoni = dataSnapshot.val();
+        dataSnapshot.forEach(function (childSnapshot) {
+            //vado a prendermi i valori della canzone singola
+            var canzoneSingola = childSnapshot.val();
+            var nomeCanzoneSingola = canzoneSingola.nome_canzone;
+            var idCanzoneSingola = canzoneSingola.id;
+        });
+    });
 }
 
 
 
-/*illumino i tastini basandomi sul valore dell'array
-function checkoNoteDellaCanzoneCaricata () {
-	sequenza_note = recuperoValoriCanzoneSelezionata();
-	console.log("seq"+sequenza_note);
-	for (z = 0; z < numCol; z++) {
-        valoreNota = sequenza_note[z];	
-		console.log("valore nota "+valoreNota);
-		/*colonnaId = determinoIdColonna(z);
-        //TEST VALUE valoreNota = 4;
-        classeCSSNota = "nota" + valoreNota;
-        //TEST VALUE colonnaIdCanzoneCaricata = "col01";
-        //PERCHE' LO ZERO ALLA FINE ???????????????????????????????????????????????????????????????????????????????????????????
-        notaDaCheckare = document.getElementById(colonnaIdCanzoneCaricata).getElementsByClassName(classeCSSNota)[0];
-        notaDaCheckare.classList.remove("unchecked");
-        notaDaCheckare.classList.add("checked"); 
-    }
-		
-}*/
 
 
 
@@ -170,66 +178,6 @@ function recuperoValoriSequenzaNote() {
     });
 }
 
-/*
-function reverseToogle() {
-
-    //trovo la colonna, l'indice della colonna e lo metto in T come numero intero
-    colonna = targetElement.parentNode;
-    colonnaId = colonna.getAttribute("id");
-    t = colonnaId.slice(-2);
-    t = parseInt(t);
-
-    /****************  PERCHE' NON POSSO USARE THIS? **************************************
-    //trovo l'id del pulsante e lo metto in I
-    i = targetElement.getAttribute("data-value");
-    i = parseInt(i);
-
-    controlloSeLaClasseEUnchecked(targetElement);
-
-    //creo l'array delle note nella colonna
-    noteColonna = colonna.children;
-
-    //se la classe è unchecked
-    if (classePulsante == "unchecked") {
-
-        //vedo se c'è già qualche elemento checked e lo metto unchecked
-        prevChecked = document.getElementById(colonnaId).getElementsByClassName("checked")[0];
-
-        //console.log(prevChecked);
-
-        if (prevChecked != null) {
-            //se c'è un elemento che prima era checked inverto le classi css
-            prevChecked.classList.remove("checked");
-            prevChecked.classList.add("unchecked");
-        }
-
-        targetElement.classList.remove("unchecked");
-        targetElement.classList.add("checked");
-
-        //do alla nota il valore del pulsante e lo metto nell'array nella posizione T
-        valoreNota = i;
-        arrayCanzone[t] = valoreNota;
-
-        //controlloSeLaPosizioneArrayEOccupata();
-        console.log(arrayCanzone);
-
-
-        //se la classe è checked la metto unchecked e ripristino la classe nota che mi serve per il css
-    } else {
-        //console.log("checked");
-        targetElement.className = "unchecked nota" + i;
-        //do alla nota il valore 0=pausa e lo metto nell'array nella posizione T
-        valoreNota = 0;
-        arrayCanzone[t] = valoreNota;
-        //controlloSeLaPosizioneArrayEOccupata();
-
-        //inserisco la nota nell'array	
-        //arrayCanzone.splice(t, 0, valoreNota);
-        console.log(arrayCanzone);
-    }
-}
-
-*/
 
 //coloro i tasti
 function coloroLeNoteDiUnaCanzoneSalvata (){	
@@ -247,3 +195,5 @@ function coloroLeNoteDiUnaCanzoneSalvata (){
 		colonnaCanzoneSalvata = getElementByID(idColonnaCanzoneSalvata);
 	}
 }
+
+pageLoad()
